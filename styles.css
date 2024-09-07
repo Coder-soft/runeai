@@ -1,0 +1,120 @@
+
+body, h1, h2, p {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    background: url('devbg.webp') no-repeat center center/cover;
+    color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    padding-top: 100px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    min-height: 100vh;
+}
+
+.header {
+    margin-bottom: 90px;
+    animation: fadeInDown 1s ease-out;
+}
+
+.main-content {
+    flex: 1;
+}
+
+.download-container {
+    background: rgba(50, 50, 50, 0.9);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+    animation: zoomIn 0.8s ease-out;
+}
+
+.download-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 25px;
+    background: #39ff14;
+    color: #000;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.download-btn:hover {
+    background: #76ff03;
+    transform: scale(1.05);
+}
+
+.footer {
+    margin-top: 50px;
+    font-size: 12px;
+    color: #666;
+}
+
+.about-dev {
+    background: rgba(50, 50, 50, 0.9);
+    color: #39ff14;
+    padding: 40px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    width: 80%;
+    margin: 30px auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-dev h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #39ff14;
+}
+
+.about-dev p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    color: #ccc;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+.downloading {
+    animation: pulse 0.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
