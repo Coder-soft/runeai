@@ -119,12 +119,82 @@ def handle_command(user_input):
     chat_log.insert(tk.END, f"$~RuneAI: {formatted_response}\n", "ai")
     chat_log.config(state=tk.DISABLED)
     chat_log.see(tk.END)
+import shutil
 
+def search_file_or_folder(query):
+    result_list = []
+    for root, dirs, files in os.walk("C:\\"):
+        for name in dirs + files:
+            if query.lower() in name.lower():
+                full_path = os.path.join(root, name)
+                result_list.append(full_path)
+    if result_list:
+        return "\n".join(result_list)
+    else:
+        return f"No files or folders found matching: {query}"
+
+def delete_file_or_folder(path):
+    try:
+        if os.path.isfile(path):
+            os.remove(path)
+            return f"File {path} deleted successfully."
+        elif os.path.isdir(path):
+            shutil.rmtree(path)
+            return f"Folder {path} deleted successfully."
+        else:
+            return f"No file or folder found at: {path}"
+    except Exception as e:
+        return f"Error deleting file or folder: {str(e)}"
+
+def create_new_folder(path):
+    try:
+        os.makedirs(path, exist_ok=True)
+        return f"Folder {path} created successfully."
+    except Exception as e:
+        return f"Error creating folder: {str(e)}"
+
+def create_new_file(path):
+    try:
+        with open(path, 'w') as file:
+            file.write("")
+        return f"File {path} created successfully."
+    except Exception as e:
+        return f"Error creating file: {str(e)}"
+
+def move_file_or_folder(src_path, dest_path):
+    try:
+        shutil.move(src_path, dest_path)
+        return f"Moved {src_path} to {dest_path}."
+    except Exception as e:
+        return f"Error moving file or folder: {str(e)}"
+
+def duplicate_file_or_folder(src_path, dest_path):
+    try:
+        if os.path.isfile(src_path):
+            shutil.copy(src_path, dest_path)
+            return f"File {src_path} duplicated to {dest_path}."
+        elif os.path.isdir(src_path):
+            shutil.copytree(src_path, dest_path)
+            return f"Folder {src_path} duplicated to {dest_path}."
+        else:
+            return f"No file or folder found at: {src_path}"
+    except Exception as e:
+        return f"Error duplicating file or folder: {str(e)}"
+
+def open_in_explorer(path):
+    try:
+        if os.path.exists(path):
+            subprocess.Popen(f'explorer "{os.path.abspath(path)}"')
+            return f"Opened {path} in File Explorer."
+        else:
+            return f"No file or folder found at: {path}"
+    except Exception as e:
+        return f"Error opening in File Explorer: {str(e)}"
 
 def process_command(command):
     command = command.lower()
     if command.startswith("ps "):
-        ps_command = command[3:]  
+        ps_command = command[3:]
         return run_powershell_command(ps_command)
     elif "close" in command:
         app_name_or_title = command.split("close ")[-1]
@@ -135,12 +205,6 @@ def process_command(command):
     elif "resolution" in command:
         width, height = map(int, re.findall(r'\d+', command))
         return change_resolution(width, height)
-    elif "close" in command:
-        app_name_or_title = command.split("close ")[-1]
-        result = close_app_by_name(app_name_or_title)
-        if "No running application" in result:
-            result = close_app_by_title(app_name_or_title)
-        return result
     elif "wallpaper" in command:
         path = command.split("wallpaper ")[-1]
         return change_wallpaper(path)
@@ -177,20 +241,36 @@ def process_command(command):
     elif "weather" in command:
         city_name = command.split("weather ")[-1]
         return get_weather(city_name)
-    elif "screenshot" in command:
-        capture_screenshot()
-        return "Screenshot captured."
+    elif "search file" in command or "search folder" in command:
+        query = command.split("search ")[-1]
+        return search_file_or_folder(query)
+    elif "delete" in command:
+        path = command.split("delete ")[-1]
+        return delete_file_or_folder(path)
+    elif "create folder" in command:
+        path = command.split("create folder ")[-1]
+        return create_new_folder(path)
+    elif "create file" in command:
+        path = command.split("create file ")[-1]
+        return create_new_file(path)
+    elif "move" in command:
+        src_path, dest_path = command.split("move ")[-1].split(" to ")
+        return move_file_or_folder(src_path, dest_path)
+    elif "duplicate" in command:
+        src_path, dest_path = command.split("duplicate ")[-1].split(" to ")
+        return duplicate_file_or_folder(src_path, dest_path)
+    elif "open in explorer" in command:
+        path = command.split("open in explorer ")[-1]
+        return open_in_explorer(path)
     else:
         return handle_unrecognized_command(command)
 def format_response(response):
-    # Remove markdown formatting
-    response = re.sub(r'\*\*(.*?)\*\*', r'\1', response)  # Remove bold
-    response = re.sub(r'\*(.*?)\*', r'\1', response)  # Remove italic
-    response = re.sub(r'`(.*?)`', r'\1', response)  # Remove code blocks
-    response = re.sub(r'^# (.*?)$', r'\1:', response, flags=re.MULTILINE)  # Convert headers to normal text
-    response = re.sub(r'```[\s\S]*?```', '', response)  # Remove multi-line code blocks
+    response = re.sub(r'\*\*(.*?)\*\*', r'\1', response)
+    response = re.sub(r'\*(.*?)\*', r'\1', response)
+    response = re.sub(r'`(.*?)`', r'\1', response)
+    response = re.sub(r'^# (.*?)$', r'\1:', response, flags=re.MULTILINE)
+    response = re.sub(r'```[\s\S]*?```', '', response)
     return response
-
 def handle_command(user_input):
     response = process_command(user_input)
     formatted_response = format_response(response)
@@ -199,7 +279,6 @@ def handle_command(user_input):
     chat_log.insert(tk.END, f"$~RuneAI: {formatted_response}\n", "ai")
     chat_log.config(state=tk.DISABLED)
     chat_log.see(tk.END)
-
 def send_message(event=None):
     user_input = chat_input.get()
     chat_input.delete(0, tk.END)
@@ -219,7 +298,6 @@ def search_web(query):
             return f"<b>Title:</b> {title}<br><b>Snippet:</b> {snippet}<br><a href='{link}' target='_blank'>Click Here to Open Link</a>"
         else:
             return "No search results found."
-    
     except Exception as e:
         return f"Error performing search: {str(e)}"
 def download_file(url):
@@ -360,53 +438,35 @@ def capture_screenshot():
     root.bind("<Escape>",lambda event:root.quit())
     root.bind("<Return>",lambda event:on_closing())
     root.mainloop()
-
 def send_message(event=None):
     user_input=chat_input.get()
     chat_log.insert(ctk.END,f"You: {user_input}\n")
     chat_input.delete(0,ctk.END)
     threading.Thread(target=handle_command,args=(user_input,)).start()
-
 import webbrowser
-
 def show_commands():
-    # URL to the webpage where commands are listed
-    commands_url = "https://runeai.gitbook.io/runeai-docs/"  # Replace with your actual URL
+    commands_url = "https://runeai.gitbook.io/runeai-docs/" 
     webbrowser.open(commands_url)
-
     chat_log.config(state=tk.NORMAL)
-    chat_log.insert(tk.END, f"$~RuneAI: {commands}\n", "ai")
+ #   chat_log.insert(tk.END, f"$~RuneAI: {commands}\n", "ai")
     chat_log.config(state=tk.DISABLED)
     chat_log.see(tk.END)
-
-# ... (other functions remain the same)
-
 app = ctk.CTk()
 app.title("System Controller")
-app.geometry("800x600")  # Increased window size
-
-# Use a custom font with larger size
+app.geometry("800x600") 
 custom_font = ("Helvetica", 16)
-
 chat_log = tk.Text(app, width=80, height=25, wrap='word', font=custom_font)
 chat_log.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
-chat_log.config(state=tk.DISABLED)  # Make it read-only
-
-# Configure tags for coloring
-chat_log.tag_configure("user", foreground="#000000")  # Blue for user
-chat_log.tag_configure("ai", foreground="#59C44A")    # Green for AI
-
+chat_log.config(state=tk.DISABLED)
+chat_log.tag_configure("user", foreground="#000000")
+chat_log.tag_configure("ai", foreground="#59C44A")
 input_frame = ctk.CTkFrame(app)
 input_frame.pack(fill="x", padx=10, pady=10)
-
 send_button = ctk.CTkButton(input_frame, text="→", width=50, command=send_message)
 send_button.pack(side="right", padx=(0, 10))
-
 chat_input = ctk.CTkEntry(input_frame, placeholder_text="$~Type your message here...", font=custom_font)
 chat_input.pack(side="left", fill="x", expand=True)
-
 commands_button = ctk.CTkButton(app, text="Show Commands", command=show_commands)
 commands_button.pack(pady=10)
-
 app.bind('<Return>', send_message)
 app.mainloop()
