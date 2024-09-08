@@ -47,6 +47,82 @@ body {
     transition: background 0.3s ease, transform 0.3s ease;
 }
 
+.contribute {
+    background: linear-gradient(135deg, #39ff14, #14d82e, #0c9600);
+    color: #fff;
+    text-align: center;
+    padding: 50px;
+    margin: 50px auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 255, 0, 0.5);
+    width: 90%;
+    position: relative;
+    animation: glowing 3s infinite;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+}
+
+.contribute:hover {
+    transform: scale(1.05) rotate(2deg);
+}
+
+.contribute h2 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: #000;
+    text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+}
+
+.contribute p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: #e0ffe0;
+}
+
+.contribute-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background: #000;
+    color: #39ff14;
+    border-radius: 30px;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 2px;
+    transition: background-color 0.3s, color 0.3s;
+    box-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14, 0 0 30px #39ff14;
+    animation: pulse 1.5s infinite;
+}
+
+.contribute-btn:hover {
+    background-color: #39ff14;
+    color: #000;
+}
+
+@keyframes glowing {
+    0% {
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.8), 0 0 20px rgba(0, 255, 0, 0.8);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 40px rgba(0, 255, 0, 1);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.8), 0 0 20px rgba(0, 255, 0, 0.8);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 .download-btn:hover {
     background: #76ff03;
     transform: scale(1.05);

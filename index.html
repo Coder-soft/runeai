@@ -3,58 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rune Ai - Download</title>
+    <title>Rune AI - Download</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* General Styles */
+        body {
+            font-family: Consolas, Fira Code Regular;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .footer {
+            background-color: #1f1f1f;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-container, .contribute, .about-dev, .partners {
+            margin: 20px auto;
+            max-width: 1200px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #222222;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .download-btn, .contribute-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #39ff14;
+            color: #000000;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .download-btn:hover, .contribute-btn:hover {
+            background-color: #14d82e;
+            transform: scale(1.05);
+        }
+
+        /* About Developer Section */
         .about-dev {
             display: flex;
             align-items: center;
             gap: 20px;
-            margin-top: 40px;
+            flex-wrap: wrap;
         }
+
         .about-dev img {
             max-width: 200px;
             height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .about-dev-content {
             flex: 1;
+            animation: slideInRight 1s ease-in-out;
         }
+
+        /* Partners Section */
         .partners {
-          background: rgba(50, 50, 50, 0.9);
-           color: #39ff14;
-           padding: 40px 20px;
-           border-radius: 10px;
-           box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
-           width: 80%;
-           margin: 30px auto;
-           position: relative;
-           overflow: hidden;
-}
+            margin: 20px auto;
+            max-width: 1200px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #222222;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+
         .partners h2 {
             font-size: 2em;
             margin-bottom: 20px;
             color: #14d82e;
         }
-        .partners-logo {
-            margin-bottom: 20px;
-        }
+
         .partners-logo img {
             max-width: 200px;
             height: auto;
             border-radius: 10px;
             transition: transform 0.3s ease;
         }
+
         .partners-logo img:hover {
             transform: scale(1.05);
         }
+
         .partners-description {
             font-size: 1.1em;
             max-width: 600px;
             margin: 0 auto;
             line-height: 1.6;
             color: #ccc;
+        }
+
+        /* Keyframes for Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .about-dev {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .about-dev img {
+                max-width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .partners-logo img {
+                max-width: 100%;
+            }
+
+            .download-container, .contribute, .about-dev, .partners {
+                padding: 10px;
+                margin: 10px;
+            }
         }
     </style>
 </head>
@@ -67,18 +158,25 @@
         <div class="download-container">
             <h2>Get Rune.py and Develop or Contribute In It</h2>
             <p>Click the button below to download Rune AI / Source Code</p>
-            <a href="https://utfs.io/f/292e3a3f-3b88-4e49-80af-79d60d0d0637-239yy.py" class="download-btn">Get Source Code. 0.12</a>
-            <a href="https://utfs.io/f/4a50970b-bf41-4244-babd-cb0e6b447643-zgiai8.exe" class="download-btn">Get Rune.exe (Experimental)</a>
+            <a href="https://utfs.io/f/f34fae57-4c4f-49f4-a9ea-2cd8f36476b5-239yy.py" class="download-btn">Get Source Code. 0.12</a>
+            <a href="https://utfs.io/f/097af497-f088-4603-a1cd-8c05cd805031-og5dg5.exe" class="download-btn">Get Rune Windows Installer 0.12</a>
         </div>
-        
         <section class="about-dev">
             <img src="sc1.png" alt="Rune AI Logo">
             <div class="about-dev-content">
                 <h2>About Rune</h2>
-                <p>Rune AI is a Project Made in Python to Provide its users an absolute Features In One APP.</p>
+                <p>Rune AI is a Project Made in Python to Provide its users absolute Features In One APP.</p>
                 <a href="https://runeai.gitbook.io/runeai-docs" class="download-btn">Commands List.</a>
             </div>
         </section>
+        
+        <!-- Contribute Section Below -->
+        <section class="contribute">
+            <h2>Contribute to This Project</h2>
+            <p>Become a part of the Rune AI community! We welcome contributions in code, design, and ideas. Help us shape the future of Rune AI.</p>
+            <a href="https://github.com/CoderSoft/RuneAI" class="contribute-btn">Contribute Now</a>
+        </section>
+                 
         <section class="partners">
             <h2>Our Partner</h2>
             <div class="partners-logo">
