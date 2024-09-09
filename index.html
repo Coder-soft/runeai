@@ -8,64 +8,89 @@
     <style>
         /* General Styles */
         body {
-            font-family: Consolas, Fira Code Regular;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #121212;
+            background-color: #0f0f0f;
             color: #ffffff;
+            line-height: 1.6;
         }
 
         h1, h2 {
             text-align: center;
             margin: 20px 0;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #39ff14;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            color: #14d82e;
+        }
+
+        p {
+            margin: 20px 0;
+            font-size: 1.1em;
+            color: #c7c7c7;
         }
 
         .footer {
-            background-color: #1f1f1f;
-            padding: 10px;
+            background-color: #1b1b1b;
+            padding: 20px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.2);
+            color: #ccc;
+            font-size: 0.9em;
         }
 
         .download-container, .contribute, .about-dev, .partners {
             margin: 20px auto;
             max-width: 1200px;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #222222;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            background-color: #161616;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
             animation: fadeIn 1s ease-in-out;
         }
 
-        .download-btn, .contribute-btn {
+        .download-btn, .contribute-btn, .discord-btn {
             display: inline-block;
-            padding: 10px 20px;
-            margin: 10px;
+            padding: 15px 30px;
+            margin: 15px;
             background-color: #39ff14;
             color: #000000;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
             transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .download-btn:hover, .contribute-btn:hover {
+        .download-btn:hover, .contribute-btn:hover, .discord-btn:hover {
             background-color: #14d82e;
-            transform: scale(1.05);
+            transform: translateY(-5px);
         }
 
         /* About Developer Section */
         .about-dev {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 40px;
             flex-wrap: wrap;
         }
 
         .about-dev img {
-            max-width: 200px;
+            max-width: 250px;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
         }
 
         .about-dev-content {
@@ -73,28 +98,31 @@
             animation: slideInRight 1s ease-in-out;
         }
 
+        .about-dev-content h2 {
+            margin-top: 0;
+        }
+
         /* Partners Section */
         .partners {
             margin: 20px auto;
             max-width: 1200px;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #222222;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            background-color: #161616;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
             animation: fadeIn 1s ease-in-out;
         }
 
-        .partners h2 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: #14d82e;
+        .partners-logo {
+            text-align: center;
         }
 
         .partners-logo img {
             max-width: 200px;
             height: auto;
-            border-radius: 10px;
+            border-radius: 15px;
             transition: transform 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
         }
 
         .partners-logo img:hover {
@@ -105,8 +133,9 @@
             font-size: 1.1em;
             max-width: 600px;
             margin: 0 auto;
-            line-height: 1.6;
-            color: #ccc;
+            line-height: 1.8;
+            color: #b2b2b2;
+            text-align: center;
         }
 
         /* Keyframes for Animations */
@@ -120,17 +149,19 @@
             to { transform: translateX(0); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
         /* Media Queries for Responsiveness */
         @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            h2 {
+                font-size: 2em;
+            }
+
             .about-dev {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
             }
 
             .about-dev img {
@@ -143,7 +174,7 @@
             }
 
             .download-container, .contribute, .about-dev, .partners {
-                padding: 10px;
+                padding: 20px;
                 margin: 10px;
             }
         }
@@ -156,25 +187,25 @@
     
     <main class="main-content">
         <div class="download-container">
-            <h2>Get Rune.py and Develop or Contribute In It</h2>
-            <p>Click the button below to download Rune AI / Source Code</p>
-            <a href="https://utfs.io/f/f34fae57-4c4f-49f4-a9ea-2cd8f36476b5-239yy.py" class="download-btn">Get Source Code. 0.12</a>
-            <a href="https://utfs.io/f/097af497-f088-4603-a1cd-8c05cd805031-og5dg5.exe" class="download-btn">Get Rune Windows Installer 0.12</a>
+            <h2>Get Rune.py and Develop or Contribute</h2>
+            <p>Click the buttons below to download Rune AI or its source code:</p>
+            <a href="https://utfs.io/f/f34fae57-4c4f-49f4-a9ea-2cd8f36476b5-239yy.py" class="download-btn">Download Source Code v0.12</a>
+            <a href="https://utfs.io/f/097af497-f088-4603-a1cd-8c05cd805031-og5dg5.exe" class="download-btn">Download Rune Installer v0.12</a>
         </div>
         <section class="about-dev">
             <img src="sc1.png" alt="Rune AI Logo">
             <div class="about-dev-content">
-                <h2>About Rune</h2>
-                <p>Rune AI is a Project Made in Python to Provide its users absolute Features In One APP.</p>
-                <a href="https://runeai.gitbook.io/runeai-docs" class="download-btn">Commands List.</a>
+                <h2>About Rune AI</h2>
+                <p>Rune AI is a Python-based project designed to offer users a comprehensive set of features in a single application.</p>
+                <a href="https://runeai.gitbook.io/runeai-docs" class="download-btn">View Commands List</a>
             </div>
         </section>
         
-        <!-- Contribute Section Below -->
+        <!-- Contribute Section -->
         <section class="contribute">
-            <h2>Contribute to This Project</h2>
-            <p>Become a part of the Rune AI community! We welcome contributions in code, design, and ideas. Help us shape the future of Rune AI.</p>
-            <a href="https://github.com/CoderSoft/RuneAI" class="contribute-btn">Contribute Now</a>
+            <h2>Contribute to Rune AI</h2>
+            <p>Join the Rune AI community! We welcome contributions in code, design, and ideas. Help us shape the future of Rune AI.</p>
+            <a href="https://github.com/Coder-Soft/RuneAI" class="contribute-btn">Contribute Now</a>
         </section>
                  
         <section class="partners">
@@ -183,13 +214,13 @@
                 <img src="eternalbox.PNG" alt="Eternal BoxPvP Logo">
             </div>
             <div class="partners-description">
-                <p>Eternal BoxPvP is a top-tier BoxPvP server offering custom gear, easy progression, and stunning maps. With an exclusive bank system and loot management, Eternal BoxPvP is the ultimate place for competitive players. Join now at EternalBox.aternos.me and become part of our thriving community.</p>
-                <a href="https://discord.gg/zNr4sG8NMg" class="download-btn">Join Us On Discord.</a>
+                <p>Eternal BoxPvP is a premier BoxPvP server offering custom gear, easy progression, and stunning maps. With an exclusive bank system and loot management, Eternal BoxPvP is the ultimate place for competitive players. Join now at EternalBox.aternos.me and become part of our thriving community.</p>
+                <a href="https://discord.gg/zNr4sG8NMg" class="discord-btn">Join Us On Discord</a>
             </div>
         </section>
     </main>
     <footer class="footer">
-        <p>Rune Devs Is an Open Source Project by Coder Soft.</p>
+        <p>Rune AI is an Open Source Project by Coder Soft.</p>
     </footer>
     <script src="scripts.js"></script>
 </body>
