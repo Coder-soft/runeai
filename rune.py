@@ -13,6 +13,12 @@ import psutil
 import os
 import signal
 import subprocess
+import youtube_dl
+import pygame
+import requests
+import os
+import json
+
 def run_powershell_command(ps_command):
     try:
         result = subprocess.run(["powershell", "-Command", ps_command], capture_output=True, text=True)
@@ -190,7 +196,7 @@ def process_command(command):
         app_name_or_title = command.split("close ", 1)[-1]
         result = close_app_by_name(app_name_or_title)
         if "No running application" in result:
-            result = close_app_by_title(app_name_or_title)
+            result = close_app_by_title(app_name_or_title)        
         return result
     elif "resolution" in command:
         match = re.search(r'resolution (\d+)x(\d+)', command)

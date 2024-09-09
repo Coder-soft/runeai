@@ -280,46 +280,60 @@ def format_response(response):
 def handle_command(user_input):
     response = process_command(user_input)
     formatted_response = format_response(response)
+
     chat_log.config(state=tk.NORMAL)
-    content = chat_log.get("1.0", tk.END).strip()
-    loading_message = "$~RuneAI: Loading...\n"
-    if loading_message in content:
-        start_index = content.index(loading_message)
-        end_index = start_index + len(loading_message)
-        chat_log.delete("1.0", tk.END) 
-        chat_log.insert(tk.END, content[:start_index])  
-        chat_log.insert(tk.END, f"$~RuneAI: {formatted_response}\n", "ai")
-    else:
-        chat_log.insert(tk.END, f"$~RuneAI: {formatted_response}\n", "ai")
+    chat_log.insert(tk.END, f"$~RuneAI: {formatted_response}\n", "ai")
     chat_log.config(state=tk.DISABLED)
     chat_log.see(tk.END)
+
+    # Save the chat history
+    log_chat(f"You: {user_input}\n")
+    log_chat(f"RuneAI: {formatted_response}\n")
+
+
+
+    
 def send_message(event=None):
     user_input = chat_input.get()
     chat_input.delete(0, tk.END)
+    
     chat_log.config(state=tk.NORMAL)
-    chat_log.insert(tk.END, f"$~You: {user_input}\n", "user")
-    chat_log.insert(tk.END, "$~RuneAI: Loading...\n", "ai")
+    
+    # Insert user's message aligned to the right with spacing
+    chat_log.insert(tk.END, f" {user_input}\n\n", "user")
+    chat_log.insert(tk.END, "$~RuneAI: Loading...\n\n", "ai")  # Insert loading message
+
     chat_log.config(state=tk.DISABLED)
     chat_log.see(tk.END)
+    
+    # Start processing the command in a separate thread
     threading.Thread(target=handle_command, args=(user_input,)).start()
 
-def search_web(query):
-    api_key = "AIzaSyDFMewub97IEuO9wSRVzkPSsWlHM4r5tkk"
-    cx = "d38be4ab9d14c48e1"
-    url = f"https://www.googleapis.com/customsearch/v1?q={query}&key={api_key}&cx={cx}"
-    try:
-        response = requests.get(url)
-        search_results = response.json()
-        if 'items' in search_results:
-            item = search_results['items'][0]
-            title = item['title']
-            snippet = item['Description']
-            link = item['link']
-            return f"<b>Title:</b> {title}<br><b>Snippet:</b> {snippet}<br><a href='{link}' target='_blank'>Click Here to Open Link</a>"
-        else:
-            return "No search results found."
-    except Exception as e:
-        return f"Error performing search: {str(e)}"
+# Get the path to AppData/Roaming
+appdata_path = os.getenv('APPDATA')
+chat_folder = os.path.join(appdata_path, 'YourAppName')  # Replace 'YourAppName' with the actual name of your app
+chat_file = os.path.join(chat_folder, 'chat_history.txt')
+
+# Ensure the folder exists
+os.makedirs(chat_folder, exist_ok=True)
+
+def save_chat(chat_history):
+    with open(chat_file, 'w', encoding='utf-8') as file: 
+        file.write("\n".join(chat_history))
+
+def log_chat(message):
+    chat_history.append(message)
+    save_chat(chat_history)
+
+# Function to load chat history
+def load_chat_history():
+    if os.path.exists(chat_file):
+        with open(chat_file, 'r', encoding='utf-8') as file:  # Use UTF-8 encoding
+            return file.readlines()  # Each line is a chat message
+    return []
+
+# Load chat history when the app starts
+chat_history = load_chat_history()
 def download_file(url):
     try:
         response = requests.get(url, stream=True)
@@ -458,11 +472,6 @@ def capture_screenshot():
     root.bind("<Escape>",lambda event:root.quit())
     root.bind("<Return>",lambda event:on_closing())
     root.mainloop()
-#def send_message(event=None):
- #   user_input=chat_input.get()
-  #  chat_log.insert(ctk.END,f"You: {user_input}\n")
-   # chat_input.delete(0,ctk.END)
-    #threading.Thread(target=handle_command,args=(user_input,)).start()
 import webbrowser
 def show_commands():
     commands_url = "https://runeai.gitbook.io/runeai-docs/" 
@@ -477,25 +486,69 @@ def eternalbox():
     chat_log.config(state=tk.NORMAL)
     chat_log.config(state=tk.DISABLED)
     chat_log.see(tk.END)
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("dark-blue")
+
 app = ctk.CTk()
 app.title("Rune AI & Rune Controller")
-app.geometry("1280x720") 
+app.geometry("1280x720")
+
+def clear_chat_history():
+    global chat_history
+    chat_history = []
+    save_chat(chat_history)
+    
+    chat_log.config(state=tk.NORMAL)
+    chat_log.delete("1.0", tk.END)
+    chat_log.config(state=tk.DISABLED)
+
+main_frame = ctk.CTkFrame(app, fg_color="#2B2B2B")
+main_frame.pack(fill="both", expand=True)
+
+# Help button
+help_button = ctk.CTkButton(main_frame, text="HELP", command=show_commands, font=("Arial", 20, "bold"), fg_color="#3A3A3A", hover_color="#4A4A4A", corner_radius=5)
+help_button.pack(anchor="nw", padx=20, pady=20)
+
+# Chat box frame
+chat_frame = ctk.CTkFrame(main_frame, fg_color="#292929", corner_radius=10)
+chat_frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+# Chat box (message display area)
 custom_font = ("Consolas", 16)
-chat_log = tk.Text(app, width=40, height=25, wrap='word', font=custom_font)
-chat_log.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
+chat_log = tk.Text(chat_frame, wrap='word', font=custom_font, bg="#292929", fg="white", borderwidth=0, highlightthickness=0)
+chat_log.pack(side="left", fill="both", expand=True, padx=20, pady=20)
 chat_log.config(state=tk.DISABLED)
-chat_log.tag_configure("user", foreground="#000000")
+chat_log.tag_configure("user", foreground="#FFFFFF")
 chat_log.tag_configure("ai", foreground="#0fbbf2")
-input_frame = ctk.CTkFrame(app)
-input_frame.pack(fill="x", padx=10, pady=10)
-send_button = ctk.CTkButton(input_frame, text="↑", width=40, command=send_message,fg_color="#6bd0f0",text_color="black")
+chat_log.tag_configure("user", justify="right", foreground="white")  # User messages aligned right
+chat_log.tag_configure("ai", justify="left", foreground="Lime")  # AI messages aligned left
+chat_log.config(state=tk.DISABLED)
+chat_log.pack(pady=10)
+for message in chat_history:
+    chat_log.config(state=tk.NORMAL)
+    chat_log.insert(tk.END, message)
+    chat_log.config(state=tk.DISABLED)
+
+# Scrollbar for chat box
+scrollbar = ctk.CTkScrollbar(chat_frame, command=chat_log.yview)
+scrollbar.pack(side="right", fill="y", padx=(0, 20), pady=20)
+
+# Connect the scrollbar to the chat log
+chat_log.configure(yscrollcommand=scrollbar.set)
+
+# Input frame
+input_frame = ctk.CTkFrame(main_frame, fg_color="#3A3A3A", corner_radius=10)
+input_frame.pack(fill="x", padx=20, pady=(0, 20))
+
+# Chat input
 box_font = ("Fira Code Regular", 16)
-send_button.pack(side="right", padx=(0, 10))
-chat_input = ctk.CTkEntry(input_frame, placeholder_text="$~Type your message here...", font=box_font)
-chat_input.pack(side="left", fill="x", expand=True)
-commands_button = ctk.CTkButton(app, text="Show Commands", command=show_commands,fg_color="#6bd0f0",text_color="black")
-commands_button.pack(pady=10)
-etnernalpart_button = ctk.CTkButton(app, text="Join Eternal Box (Partner)", command=eternalbox,fg_color="#6bd0f0",text_color="black")
-etnernalpart_button.pack(pady=10)
+chat_input = ctk.CTkEntry(input_frame, placeholder_text="$-TYPE COMMAND HERE", font=box_font, fg_color="#3A3A3A", text_color="white",)
+chat_input.pack(side="left", fill="x", expand=True, padx=(20, 5), pady=10)
+
+# Send button
+send_button = ctk.CTkButton(input_frame, text="→", font=("Arial", 24, "bold"), width=50, fg_color="#3A3A3A", hover_color="#4A4A4A", corner_radius=5, command=lambda: send_message(None))
+send_button.pack(side="right", padx=(5, 20), pady=10)
+
+# Bind the Enter key to send_message
 app.bind('<Return>', send_message)
 app.mainloop()
